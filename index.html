@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Wallet</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Arial,sans-serif;
+  background:#06100c;
+  color:#fff;
+  min-height:100vh;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  background:#091711;
+  padding:20px 18px 90px;
+}
+
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:28px;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:bold;
+  font-size:19px;
+}
+
+.logoIcon{
+  width:38px;height:38px;
+  border-radius:50%;
+  background:#35d58a;
+  color:#062015;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+}
+
+.more{font-size:25px}
+
+.screen{display:none}
+.screen.active{display:block}
+
+.balance{text-align:center;margin:10px 0 25px}
+.small{color:#8ca097;font-size:13px}
+.amount{
+  font-size:38px;
+  font-weight:bold;
+  margin:8px 0;
+}
+.green{color:#35d58a}
+
+.actions{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:30px;
+}
+
+.action{
+  border:0;
+  border-radius:15px;
+  padding:15px 5px;
+  background:#11281e;
+  color:white;
+}
+.action span{
+  display:block;
+  font-size:23px;
+  margin-bottom:7px;
+}
+
+.title{
+  font-size:19px;
+  font-weight:bold;
+  margin-bottom:14px;
+}
+
+.asset{
+  width:100%;
+  border:0;
+  color:white;
+  background:#10231b;
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  text-align:left;
+}
+
+.coin{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.coinIcon{
+  width:43px;height:43px;
+  border-radius:50%;
+  background:#263b32;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+}
+.coinName{font-weight:bold}
+.symbol{
+  color:#82958c;
+  font-size:12px;
+  margin-top:4px;
+}
+.right{text-align:right}
+.price{font-weight:bold}
+.change{font-size:12px;margin-top:5px}
+
+.card{
+  background:#10231b;
+  border-radius:18px;
+  padding:18px;
+  margin-top:15px;
+}
+
+.back{
+  background:none;
+  border:0;
+  color:#35d58a;
+  margin-bottom:20px;
+  font-size:15px;
+}
+
+.formTitle{
+  font-size:27px;
+  font-weight:bold;
+  margin-bottom:22px;
+}
+
+label{
+  display:block;
+  color:#91a39b;
+  font-size:13px;
+  margin:15px 0 7px;
+}
+
+input,select{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #294338;
+  background:#07130e;
+  color:white;
+  outline:none;
+}
+
+.primary{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:15px;
+  margin-top:20px;
+  background:#35d58a;
+  color:#052015;
+  font-weight:bold;
+}
+
+.address{
+  word-break:break-all;
+  background:#07130e;
+  border-radius:12px;
+  padding:15px;
+  color:#b5c4be;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.copy{
+  width:100%;
+  border:1px solid #315246;
+  background:#12291f;
+  color:white;
+  border-radius:12px;
+  padding:13px;
+  margin-top:10px;
+}
+
+.swapArrow{
+  text-align:center;
+  font-size:25px;
+  margin:10px;
+  color:#35d58a;
+}
+
+.tx{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:15px 0;
+  border-bottom:1px solid #20362c;
+}
+
+.tx:last-child{border-bottom:0}
+
+.txIcon{
+  width:40px;height:40px;
+  border-radius:50%;
+  background:#20372d;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.txLeft{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:430px;
+  height:70px;
+  background:#0b1b14;
+  border-top:1px solid #20382d;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+}
+
+.nav{
+  border:0;
+  background:none;
+  color:#71857c;
+  font-size:12px;
+}
+.navIcon{
+  display:block;
+  font-size:21px;
+  margin-bottom:4px;
+}
+.nav.active{color:#35d58a}
+
+.notice{
+  margin-top:14px;
+  color:#82958c;
+  font-size:12px;
+  line-height:1.5;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+  <div class="logo">
+    <div class="logoIcon">W</div>
+    My Wallet
+  </div>
+  <div class="more">⋮</div>
+</header>
+
+<!-- HOME -->
+<section id="home" class="screen active">
+
+  <div class="balance">
+    <div class="small">Total Balance</div>
+    <div class="amount">$10,542.28</div>
+    <div class="green">▲ 2.41% Today</div>
+  </div>
+
+  <div class="actions">
+    <button class="action" onclick="showScreen('send')">
+      <span>↑</span>Send
+    </button>
+
+    <button class="action" onclick="showScreen('receive')">
+      <span>↓</span>Receive
+    </button>
+
+    <button class="action" onclick="showScreen('swap')">
+      <span>⇄</span>Swap
+    </button>
+  </div>
+
+  <div class="title">Your Assets</div>
+
+  <button class="asset" onclick="coinDetails('Bitcoin','BTC','$5,240.20')">
+    <div class="coin">
+      <div class="coinIcon">₿</div>
+      <div>
+        <div class="coinName">Bitcoin</div>
+        <div class="symbol">BTC</div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="price">$5,240.20</div>
+      <div class="change green">+1.82%</div>
+    </div>
+  </button>
+
+  <button class="asset" onclick="coinDetails('Ethereum','ETH','$2,830.50')">
+    <div class="coin">
+      <div class="coinIcon">Ξ</div>
+      <div>
+        <div class="coinName">Ethereum</div>
+        <div class="symbol">ETH</div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="price">$2,830.50</div>
+      <div class="change green">+3.21%</div>
+    </div>
+  </button>
+
+  <button class="asset" onclick="coinDetails('BNB','BNB','$1,120.30')">
+    <div class="coin">
+      <div class="coinIcon">BNB</div>
+      <div>
+        <div class="coinName">BNB</div>
+        <div class="symbol">BNB</div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="price">$1,120.30</div>
+      <div class="change green">+1.12%</div>
+    </div>
+  </button>
+
+  <button class="asset" onclick="coinDetails('Tether','USDT','$1,351.28')">
+    <div class="coin">
+      <div class="coinIcon">₮</div>
+      <div>
+        <div class="coinName">Tether</div>
+        <div class="symbol">USDT</div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="price">$1,351.28</div>
+      <div class="change green">0.00%</div>
+    </div>
+  </button>
+
+</section>
+
+<!-- SEND -->
+<section id="send" class="screen">
+
+  <button class="back" onclick="showScreen('home')">← Back</button>
+
+  <div class="formTitle">Send Crypto</div>
+
+  <div class="card">
+
+    <label>Asset</label>
+    <select>
+      <option>USDT</option>
+      <option>Bitcoin</option>
+      <option>Ethereum</option>
+      <option>BNB</option>
+    </select>
+
+    <label>Recipient Address</label>
+    <input id="recipient" placeholder="Enter wallet address">
+
+    <label>Amount</label>
+    <input id="sendAmount" type="number" placeholder="0.00">
+
+    <button class="primary" onclick="demoSend()">Review Transaction</button>
+
+    <div class="notice">
+      Demo mode: no real cryptocurrency will be sent.
+    </div>
+
+  </div>
+</section>
+
+<!-- RECEIVE -->
+<section id="receive" class="screen">
+
+  <button class="back" onclick="showScreen('home')">← Back</button>
+
+  <div class="formTitle">Receive Crypto</div>
+
+  <div class="card">
+
+    <div class="small">Your demo wallet address</div>
+
+    <br>
+
+    <div class="address" id="walletAddress">
+      0x7A92F3B4C8D1E605A1B9F728C34E92D7A610B421
+    </div>
+
+    <button class="copy" onclick="copyAddress()">Copy Address</button>
+
+    <div class="notice">
+      Only send compatible assets to the selected network.
+    </div>
+
+  </div>
+</section>
+
+<!-- SWAP -->
+<section id="swap" class="screen">
+
+  <button class="back" onclick="showScreen('home')">← Back</button>
+
+  <div class="formTitle">Swap</div>
+
+  <div class="card">
+
+    <label>You Pay</label>
+
+    <select id="fromCoin">
+      <option value="USDT">USDT</option>
+      <option value="BTC">BTC</option>
+      <option value="ETH">ETH</option>
+      <option value="BNB">BNB</option>
+    </select>
+
+    <input id="swapAmount" type="number" placeholder="0.00" oninput="calculateSwap()">
+
+    <div class="swapArrow">↓</div>
+
+    <label>You Receive</label>
+
+    <select id="toCoin">
+      <option value="BTC">BTC</option>
+      <option value="ETH">ETH</option>
+      <option value="BNB">BNB</option>
+      <option value="USDT">USDT</option>
+    </select>
+
+    <input id="receiveAmount" readonly placeholder="Estimated amount">
+
+    <button class="primary" onclick="demoSwap()">Review Swap</button>
+
+    <div class="notice">
+      Demo exchange rate. No real transaction is performed.
+    </div>
+
+  </div>
+</section>
+
+<!-- ACTIVITY -->
+<section id="activity" class="screen">
+
+  <div class="formTitle">Activity</div>
+
+  <div class="card">
+
+    <div class="tx">
+      <div class="txLeft">
+        <div class="txIcon">↓</div>
+        <div>
+          <b>Received USDT</b>
+          <div class="symbol">Today · Completed</div>
+        </div>
+      </div>
+      <div class="green">+$500</div>
+    </div>
+
+    <div class="tx">
+      <div class="txLeft">
+        <div class="txIcon">↑</div>
+        <div>
+          <b>Sent BNB</b>
+          <div class="symbol">Yesterday · Completed</div>
+        </div>
+      </div>
+      <div>-$120</div>
+    </div>
+
+    <div class="tx">
+      <div class="txLeft">
+        <div class="txIcon">⇄</div>
+        <div>
+          <b>Swap BTC</b>
+          <div class="symbol">2 days ago · Completed</div>
+        </div>
+      </div>
+      <div>-$250</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- COIN DETAIL -->
+<section id="details" class="screen">
+
+  <button class="back" onclick="showScreen('home')">← Back</button>
+
+  <div class="formTitle" id="detailName">Bitcoin</div>
+
+  <div class="card">
+    <div class="small" id="detailSymbol">BTC</div>
+    <br>
+    <div class="amount" id="detailPrice">$0</div>
+    <div class="green">+2.41% Today</div>
+  </div>
+
+  <div class="actions" style="margin-top:20px">
+    <button class="action" onclick="showScreen('send')">
+      <span>↑</span>Send
+    </button>
+    <button class="action" onclick="showScreen('receive')">
+      <span>↓</span>Receive
+    </button>
+    <button class="action" onclick="showScreen('swap')">
+      <span>⇄</span>Swap
+    </button>
+  </div>
+
+</section>
+
+</div>
+
+<nav class="bottom">
+
+  <button class="nav active" onclick="showScreen('home',this)">
+    <span class="navIcon">⌂</span>
+    Home
+  </button>
+
+  <button class="nav" onclick="showScreen('swap',this)">
+    <span class="navIcon">⇄</span>
+    Swap
+  </button>
+
+  <button class="nav" onclick="showScreen('activity',this)">
+    <span class="navIcon">◷</span>
+    Activity
+  </button>
+
+</nav>
+
+<script>
+
+function showScreen(id,navButton){
+
+  document.querySelectorAll('.screen')
+    .forEach(s=>s.classList.remove('active'));
+
+  document.getElementById(id)
+    .classList.add('active');
+
+  document.querySelectorAll('.nav')
+    .forEach(n=>n.classList.remove('active'));
+
+  if(navButton){
+    navButton.classList.add('active');
+  }
+
+  window.scrollTo(0,0);
+}
+
+function copyAddress(){
+
+  const address=document.getElementById("walletAddress").innerText;
+
+  navigator.clipboard.writeText(address);
+
+  alert("Demo wallet address copied!");
+}
+
+function demoSend(){
+
+  const address=document.getElementById("recipient").value;
+  const amount=document.getElementById("sendAmount").value;
+
+  if(!address || !amount){
+    alert("Please enter recipient address and amount.");
+    return;
+  }
+
+  alert("Demo transaction ready!\n\nNo real crypto will be sent.");
+}
+
+function calculateSwap(){
+
+  const amount=parseFloat(
+    document.getElementById("swapAmount").value
+  ) || 0;
+
+  const result=amount * 0.000015;
+
+  document.getElementById("receiveAmount").value =
+    result.toFixed(8);
+}
+
+function demoSwap(){
+
+  const amount=document.getElementById("swapAmount").value;
+
+  if(!amount){
+    alert("Enter an amount first.");
+    return;
+  }
+
+  alert("Demo swap ready!\n\nNo real cryptocurrency will be exchanged.");
+}
+
+function coinDetails(name,symbol,price){
+
+  document.getElementById("detailName").innerText=name;
+  document.getElementById("detailSymbol").innerText=symbol;
+  document.getElementById("detailPrice").innerText=price;
+
+  showScreen("details");
+}
+
+</script>
+
+</body>
+</html>
